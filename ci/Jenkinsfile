@@ -12,7 +12,7 @@ pipeline {
         ).trim()
 //         IMAGE_NAME="jenkins-gs-${env.gitlabBranch}-${env.BUILD_NUMBER}-$GIT_COMMIT_SHORT"
         IMAGE_NAME="jenkins-toy"
-        CREDENTIALS_ID='78b2b3dd-f122-401b-a5f6-ac153f24728b'
+        CREDENTIALS_ID='21d5124e-86bb-43b4-b89a-3214cfcfbcf5'
     }
 
     stages {
