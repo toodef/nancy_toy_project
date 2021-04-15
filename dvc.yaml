@@ -1,0 +1,41 @@
+stages:
+  dataset_stratification:
+    cmd: python dataset_stratification.py
+    deps:
+    - artifacts/dataset
+    - dataset_stratification.py
+    outs:
+    - artifacts/indices
+
+  # train
+  train_resnet18_fold_0:
+    cmd: python train.py -m resnet18 -f 0
+    deps:
+    - artifacts/dataset
+    - artifacts/indices
+    - train.py
+    - train_config/config.py
+    - train_config/train_config.py
+    outs:
+    - artifacts/train/resnet18/fold_0
+  train_resnet18_fold_1:
+    cmd: python train.py -m resnet18 -f 1
+    deps:
+    - artifacts/dataset
+    - artifacts/indices
+    - train.py
+    - train_config/config.py
+    - train_config/train_config.py
+    outs:
+    - artifacts/train/resnet18/fold_1
+  train_resnet18_fold_2:
+    cmd: python train.py -m resnet18 -f 2
+    deps:
+    - artifacts/dataset
+    - artifacts/indices
+    - train.py
+    - train_config/config.py
+    - train_config/train_config.py
+    - artifacts/train/resnet18/fold_0
+    outs:
+    - artifacts/train/resnet18/fold_2
