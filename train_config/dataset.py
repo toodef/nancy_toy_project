@@ -21,7 +21,7 @@ class CatsDogsDataset(BasicDataset):
                 items.append({'data': os.path.join(DATASET_ROOT, class_name, file),
                               'target': [1, 0] if class_name == 'cats' else [0, 1]})
 
-        items.sort(key=lambda x: os.path.splitext(x)[0])
+        items.sort(key=lambda x: os.path.splitext(x['data'])[0])
         super().__init__(items)
 
     def _interpret_item(self, item) -> any:
