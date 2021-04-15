@@ -21,4 +21,4 @@ if __name__ == '__main__':
         os.makedirs(cur_dir)
 
     with open(os.path.join(cur_dir, "metrics.json"), 'w') as out_file:
-        json.dump({'metric1': random(), 'metric2': random()}, out_file)
+        json.dump({'metric1': random(), 'metric2': random() * 2}, out_file)
