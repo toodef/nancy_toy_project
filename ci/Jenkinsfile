@@ -51,10 +51,10 @@ pipeline {
             }
         }
 
-        stage('clean') {
-            steps {
-                sh "docker rmi $IMAGE_NAME"
-            }
-        }
+//         stage('clean') {
+//             steps {
+//                 sh "docker rmi $IMAGE_NAME"
+//             }
+//         }
     }
 }
