@@ -20,6 +20,7 @@ pipeline {
             // gitlabCommitStatus("running")
             steps {
                 sh "git checkout " + env.BRANCH_NAME
+                sh "git pull"
                 sh "docker build -t $IMAGE_NAME -f docker/Dockerfile ."
             }
         }
