@@ -1,0 +1,61 @@
+pipeline {
+    agent { label 'gpu' }
+
+    triggers {
+        gitlab(triggerOnMergeRequest: true, branchFilterType: 'All', noteRegex: "run train", triggerOnPush: false)
+    }
+
+    environment {
+        GIT_COMMIT_SHORT = sh(
+            script: "git log -n 1 --pretty=format:'%h'",
+            returnStdout: true
+        ).trim()
+//         IMAGE_NAME="jenkins-gs-${env.gitlabBranch}-${env.BUILD_NUMBER}-$GIT_COMMIT_SHORT"
+        IMAGE_NAME="jenkins-gs"
+        CREDENTIALS_ID='78b2b3dd-f122-401b-a5f6-ac153f24728b'
+    }
+
+    stages {
+        stage('build') {
+            // gitlabCommitStatus("running")
+            steps {
+                sh "docker build -t $IMAGE_NAME -f docker/Dockerfile ."
+            }
+        }
+        stage('pull data') {
+            steps {
+                sh "docker run --rm -i --runtime=nvidia -v /etc/localtime:/etc/localtime:ro -v `pwd`:/app --entrypoint dvc $IMAGE_NAME pull -r s3_local artifacts/dataset.dvc"
+            }
+        }
+
+        stage('train') {
+            steps {
+                sh "docker run --rm -i --runtime=nvidia --shm-size 8G -v /etc/localtime:/etc/localtime:ro -v `pwd`:/app --entrypoint dvc $IMAGE_NAME repro"
+            }
+        }
+
+        stage('push') {
+            steps {
+                sh "docker run --rm -i --runtime=nvidia -v /etc/localtime:/etc/localtime:ro -v `pwd`:/app --entrypoint dvc $IMAGE_NAME push -r s3_local"
+                sh "find artifacts -name '*.dvc' -print0 | xargs -0 git add"
+                sh "git add dvc.lock"
+                sh '''
+                    git config user.name "jenkins"
+                    git config user.email "jenkins@jenkins.com"
+                    '''
+                sh "git commit -a -m 'train done'"
+                withCredentials([usernamePassword(credentialsId: env.CREDENTIALS_ID,
+                                                  passwordVariable: 'GIT_PASSWORD',
+                                                  usernameVariable: 'GIT_USERNAME')]) {
+                        sh('git push http://${GIT_USERNAME}:${GIT_PASSWORD}@188.243.59.185:8081/garment-object-photo/segmentation_model.git')
+                    }
+            }
+        }
+
+        stage('clean') {
+            steps {
+                sh "docker rmi $IMAGE_NAME"
+            }
+        }
+    }
+}
