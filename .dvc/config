@@ -1,0 +1,5 @@
+['remote "s3_local"']
+    url = s3://dvc/toy
+    endpointurl = http://188.243.59.185:9000
+    access_key_id = 44Kb3R3jYKn2uw4U
+    secret_access_key = 344WyrPSP55mrVBm

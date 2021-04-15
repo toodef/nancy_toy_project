@@ -1,6 +1,4 @@
-import json
 import os
-from typing import List, Tuple
 
 import cv2
 import numpy as np
@@ -11,21 +9,24 @@ from albumentations import Compose, GaussNoise, RandomGamma, RandomBrightnessCon
 from pietoolbelt.datasets.common import BasicDataset
 from pietoolbelt.datasets.utils import AugmentedDataset
 
-from config import DATASET_LABELS, DATASET_ROOT
+from config import DATASET_ROOT
 from train_config.config import data_height, data_width
 
 
 class CatsDogsDataset(BasicDataset):
     def __init__(self):
         items = []
-        for file in os.listdir(os.path.join(DATASET_ROOT, 'images_original')):
-            items.append(os.path.join(DATASET_ROOT, 'images_original', file))
+        for class_name in ['cats', 'dogs']:
+            for file in os.listdir(os.path.join(DATASET_ROOT, class_name)):
+                items.append({'data': os.path.join(DATASET_ROOT, class_name, file),
+                              'target': [1, 0] if class_name == 'cats' else [0, 1]})
 
         items.sort(key=lambda x: os.path.splitext(x)[0])
         super().__init__(items)
 
     def _interpret_item(self, item) -> any:
-        return {'data': np.zeros((512, 521, 3), dtype=np.uint8), 'target': 0}
+        img = cv2.imread(item['data'])
+        return {'data': img, 'target': np.array(item['target'], dtype=np.float32)}
 
 
 class Augmentations:

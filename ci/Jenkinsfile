@@ -11,7 +11,7 @@ pipeline {
             returnStdout: true
         ).trim()
 //         IMAGE_NAME="jenkins-gs-${env.gitlabBranch}-${env.BUILD_NUMBER}-$GIT_COMMIT_SHORT"
-        IMAGE_NAME="jenkins-gs"
+        IMAGE_NAME="jenkins-toy"
         CREDENTIALS_ID='78b2b3dd-f122-401b-a5f6-ac153f24728b'
     }
 
@@ -47,7 +47,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: env.CREDENTIALS_ID,
                                                   passwordVariable: 'GIT_PASSWORD',
                                                   usernameVariable: 'GIT_USERNAME')]) {
-                        sh('git push http://${GIT_USERNAME}:${GIT_PASSWORD}@188.243.59.185:8081/garment-object-photo/segmentation_model.git')
+                        sh('git push http://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/toodef/nancy_toy_project.git')
                     }
             }
         }
