@@ -14,7 +14,7 @@ from pietoolbelt.metrics.torch.segmentation import SegmentationMetricsProcessor
 from pietoolbelt.steps.common.train import FoldedTrainer
 from piepline.monitoring.hub import MonitorHub
 
-from config import folds_indices_files
+from config import folds_indices_files, TRAIN_DIR
 from train_config.config import epochs_num, folds_num
 from train_config.train_config import TrainConfig, ResNet18TrainConfig
 
@@ -62,6 +62,12 @@ if __name__ == "__main__":
     folds_dict = {'fold_{}.npy'.format(i): 'fold_{}'.format(i) for i in range(folds_num)}
 
     if args.model == "resnet18":
-        folded_trainer = FoldedTrainer(folds=list(folds_indices_files.keys()))
-        folded_trainer.train_fold(init_trainer=lambda fsm, folds: init_trainer(ResNet18TrainConfig, folds, fsm),
-                                  model_name='resnet18', out_dir=os.path.join('artifacts', 'train'), fold_num=args.fold_num)
+        cur_dir = os.path.join(TRAIN_DIR, args.model, 'fold_{}'.format(args.fold_num))
+        if not os.path.exists(cur_dir):
+            os.makedirs(cur_dir)
+
+        with open(os.path.join(cur_dir, "{}_fold.txt".format(args.fold_num)), 'w') as out_file:
+            out_file.write('done')
+        # folded_trainer = FoldedTrainer(folds=list(folds_indices_files.keys()))
+        # folded_trainer.train_fold(init_trainer=lambda fsm, folds: init_trainer(ResNet18TrainConfig, folds, fsm),
+        #                           model_name='resnet18', out_dir=os.path.join('artifacts', 'train'), fold_num=args.fold_num)
