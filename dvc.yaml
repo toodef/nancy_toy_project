@@ -40,17 +40,17 @@ stages:
     outs:
     - artifacts/train/resnet18/fold_2
 
-#  # predict
-#  predict_resnet18:
-#    cmd: python predict.py -m resnet18
-#    deps:
-#    - artifacts/dataset
-#    - artifacts/indices
-#    - predict.py
-#    - train_config/config.py
-#    - train_config/train_config.py
-#    - artifacts/train/resnet18/fold_0
-#    - artifacts/train/resnet18/fold_1
-#    - artifacts/train/resnet18/fold_2
-#    metrics:
-#    - artifacts/predicts/resnet18/metrics.json
+  # predict
+  predict_resnet18:
+    cmd: python predict.py -m resnet18
+    deps:
+    - artifacts/dataset
+    - artifacts/indices
+    - predict.py
+    - train_config/config.py
+    - train_config/train_config.py
+    - artifacts/train/resnet18/fold_0
+    - artifacts/train/resnet18/fold_1
+    - artifacts/train/resnet18/fold_2
+    metrics:
+    - artifacts/predicts/resnet18/metrics.json
