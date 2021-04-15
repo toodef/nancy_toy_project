@@ -12,7 +12,7 @@ stages:
       size: 599
     outs:
     - path: artifacts/indices
-      md5: af30d317bf701ecea011f41d47e3f275.dir
+      md5: 9340add1b6744761c29bd0609d28e5b6.dir
       size: 1032
       nfiles: 4
   train_resnet18_fold_0:
@@ -23,7 +23,7 @@ stages:
       size: 1495583
       nfiles: 65
     - path: artifacts/indices
-      md5: af30d317bf701ecea011f41d47e3f275.dir
+      md5: 9340add1b6744761c29bd0609d28e5b6.dir
       size: 1032
       nfiles: 4
     - path: train.py
@@ -48,7 +48,7 @@ stages:
       size: 1495583
       nfiles: 65
     - path: artifacts/indices
-      md5: af30d317bf701ecea011f41d47e3f275.dir
+      md5: 9340add1b6744761c29bd0609d28e5b6.dir
       size: 1032
       nfiles: 4
     - path: train.py
@@ -73,7 +73,7 @@ stages:
       size: 1495583
       nfiles: 65
     - path: artifacts/indices
-      md5: af30d317bf701ecea011f41d47e3f275.dir
+      md5: 9340add1b6744761c29bd0609d28e5b6.dir
       size: 1032
       nfiles: 4
     - path: artifacts/train/resnet18/fold_0
@@ -94,3 +94,39 @@ stages:
       md5: f3cb33a82653a46d9d79aa5e55624700.dir
       size: 4
       nfiles: 1
+  predict_resnet18:
+    cmd: python predict.py -m resnet18
+    deps:
+    - path: artifacts/dataset
+      md5: a4f1f185595919bf22d0a207b0b96d43.dir
+      size: 1495583
+      nfiles: 65
+    - path: artifacts/indices
+      md5: 9340add1b6744761c29bd0609d28e5b6.dir
+      size: 1032
+      nfiles: 4
+    - path: artifacts/train/resnet18/fold_0
+      md5: 068eb5be0f188d782ea45f19a74eb865.dir
+      size: 4
+      nfiles: 1
+    - path: artifacts/train/resnet18/fold_1
+      md5: 27ef13523a69eb08e739765fca77a8bb.dir
+      size: 4
+      nfiles: 1
+    - path: artifacts/train/resnet18/fold_2
+      md5: f3cb33a82653a46d9d79aa5e55624700.dir
+      size: 4
+      nfiles: 1
+    - path: predict.py
+      md5: 689216047c43a002b35df4d85fe9b56a
+      size: 771
+    - path: train_config/config.py
+      md5: ede4378f43ac2308b9a8758ff7d0268e
+      size: 96
+    - path: train_config/train_config.py
+      md5: 2a6b00dfeb3be481227e0f0ebe815a9e
+      size: 3199
+    outs:
+    - path: artifacts/predicts/resnet18/metrics.json
+      md5: 2e6ba53d32cd38cee3c63e7b6235da86
+      size: 61
