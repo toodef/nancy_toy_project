@@ -13,12 +13,14 @@ pipeline {
 //         IMAGE_NAME="jenkins-gs-${env.gitlabBranch}-${env.BUILD_NUMBER}-$GIT_COMMIT_SHORT"
         IMAGE_NAME="jenkins-toy"
         CREDENTIALS_ID='21d5124e-86bb-43b4-b89a-3214cfcfbcf5'
+        BRANCH=env.BRANCH_NAME
     }
 
     stages {
         stage('build') {
             // gitlabCommitStatus("running")
             steps {
+                sh "git checkout $BRANCH"
                 sh "docker build -t $IMAGE_NAME -f docker/Dockerfile ."
             }
         }
@@ -40,10 +42,11 @@ pipeline {
                 sh "find artifacts -name '*.dvc' -print0 | xargs -0 git add"
                 sh "git add dvc.lock"
                 sh '''
-                    git config user.name "jenkins"
-                    git config user.email "jenkins@jenkins.com"
+                    git config user.name "toodef"
+                    git config user.email "fedotov.atnon.af@gmail.com"
                     '''
                 sh "git commit -a -m 'train done'"
+
                 withCredentials([usernamePassword(credentialsId: env.CREDENTIALS_ID,
                                                   passwordVariable: 'GIT_PASSWORD',
                                                   usernameVariable: 'GIT_USERNAME')]) {
