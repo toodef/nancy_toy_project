@@ -20,5 +20,5 @@ if __name__ == '__main__':
     if not os.path.exists(cur_dir):
         os.makedirs(cur_dir)
 
-    with open(os.path.join(cur_dir, "metrics.json".format(args.fold_num)), 'w') as out_file:
+    with open(os.path.join(cur_dir, "metrics.json"), 'w') as out_file:
         json.dump({'metric1': random(), 'metric2': random()}, out_file)
